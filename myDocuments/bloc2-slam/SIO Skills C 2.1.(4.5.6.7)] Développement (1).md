@@ -1,7 +1,6 @@
 ## Compétences utilisés :
 
 - [Utilisation de composants d’accès aux données](https://github.com/KilianL55/sio-skills/issues/9)
-- [Exploitation des ressources du cadre applicatif](https://github.com/KilianL55/sio-skills/issues/9)
 
 ## Utilisation de composants d'accès aux données : 
 

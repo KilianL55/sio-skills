@@ -6,9 +6,9 @@
 
 ### Création :
 
-Pour créer une table avec le Framework Spring Boot on utilise le module JPA Database. Il faut donc implémente une class métier (Entity)
+Pour créer une table avec le Framework Spring Boot on utilise le module JPA Database. Il faut donc implémenter une classe métier (Entity)
 
-Exemple d'implémentation d'une class Entity :
+Exemple d'implémentation d'une classe Entity :
 
 ```Java
 @Entity
@@ -24,7 +24,7 @@ Cette implémentation va donc créer une table sous cette forme :
 ID | Name | Age
 --- | --- | ---
 
-Pour exploiter les données d'une base de données, il faut utlisé des repositories.
+Pour exploiter les données d'une base de données, il faut utliser des repositories.
 
 Exemple d'implémentation d'un repository : 
 
@@ -37,7 +37,7 @@ public interface IRepoUser extends CrudRepository<User, Integrer> {
     public User retrieveByAge(@Param("age") int age);
 }
 ```
-Dans notre exemple `extends CrudRepository<User, Integrer>` permet d'intégrer les méthodes fourni par l'interface CrudRepository :
+Dans notre exemple `extends CrudRepository<User, Integrer>` permet d'intégrer les méthodes fournies par l'interface CrudRepository :
 
 - save()
 - saveAll()

@@ -1,4 +1,4 @@
-## Compétences utilisés :
+## Compétence utilisée :
 
 - [Utilisation de composants d’accès aux données](https://github.com/KilianL55/sio-skills/issues/9)
 

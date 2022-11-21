@@ -1,80 +1,116 @@
-﻿
+## Compétences utilisés :
 
-Durant le projet E-Music j’ai utilisé le framework spring boot.
+- [Utilisation de composants d’accès aux données](https://github.com/KilianL55/sio-skills/issues/9)
+- [Exploitation des ressources du cadre applicatif](https://github.com/KilianL55/sio-skills/issues/9)
 
-Compétences utilisés :
+## Utilisation de composants d'accès aux données : 
 
-Utilisation de composants d’accès aux données
-Exploitation des ressources du cadre applicatif (framework)
+### Création :
 
+Pour créer une table avec le Framework Spring Boot on utilise le module JPA Database. Il faut donc implémente une class métier (Entity)
 
-Utilisation de composants d’accès aux données
+Exemple d'implémentation d'une class Entity :
 
-Exploitation des ressources du cadre applicatif (framework)
-
-Pour la compétence composants d'accès aux données nous avons donc utilisé le module du
-
-framework Spring Data JPA qui permet d'interagir avec une base de données.
-
-Voici un exemple de son implémentation :
-
-```
-public interface IRepoEnfant extends CrudRepository<Enfant, Integer> {`
-
-    public Enfant findByUsername(String username);
-    public List<Enfant> findByResponsable(Responsable responsable);
-    public Enfant findByUsernameAndResponsable(String username, Responsable responsable);
-
+```Java
+@Entity
+public class User {
+    @Id
+    private int id;
+    private String name;
+    private int age
 }
 ```
-Voici l’implémentation d’une interface JPA, cette interface permet donc d’accéder aux
+Cette implémentation va donc créer une table sous cette forme :
 
-données grâce au fait que l’on a étendu **CrudRepository** à l’interfac.
+ID | Name | Age
+--- | --- | ---
 
-Voici comment injecter le repository dans le code :  
+Pour exploiter les données d'une base de données, il faut utlisé des repositories.
+
+Exemple d'implémentation d'un repository : 
+
+```Java
+public interface IRepoUser extends CrudRepository<User, Integrer> {
+    
+    public User findByName();
+    
+    @Query("SELECT u FROM User u WHERE u.age = :name")
+    public User retrieveByAge(@Param("age") int age);
+}
 ```
-@Autowired  
-private IRepoResponsable repoResponsable;
-```
-Voici l’exemple d’une lecture dans la base de données :
+Dans notre exemple `extends CrudRepository<User, Integrer>` permet d'intégrer les méthodes fourni par l'interface CrudRepository :
 
-Le but est de trouver tous les enfants qui appartiennent au responsable.
+- save()
+- saveAll()
+- findById()
+- existsById()
+- indAll()
+- findAllById()
+- count()
+- deleteById()
+- delete()
+- deleteAllById()
+- deleteAll()
+- deleteAll()
 
-```
-  Responsable parent = (Responsable) responsable;  
-  List<Enfant> enfants = repoEnfant.findByResponsable(parent);
-```
+Sinon vous pouvez impléter vos propres méthodes : 
 
-Voici l'exemple de mettre à jour des données dans la base de données :
-
-```
-@PostMapping("/updateResponsable")
-    public RedirectView updateResponsable( @ModelAttribute Responsable responsable){
-        Responsable resp = (Responsable) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        resp.setNom(responsable.getNom());
-        resp.setPrenom(responsable.getPrenom());
-        resp.setUsername(responsable.getUsername());
-        resp.setAdresse(responsable.getAdresse());
-        resp.setAdresse2(responsable.getAdresse2());
-        resp.setVille(responsable.getVille());
-        resp.setCode_postal(responsable.getCode_postal());
-        resp.setQuotient_familial(responsable.getQuotient_familial());
-        resp.setTel1(responsable.getTel1());
-        resp.setTel2(responsable.getTel2());
-        resp.setTel3(responsable.getTel3());
-        repoResponsable.save(resp);
-        return new RedirectView("dashboard");
-
-    }
+- `public User findByName();` qui va donc chercher le User par son nom.
+- Il est possible d'utiliser l'annotation @Query pour créer une requête en JPQL ou SQL Natif
+```Java
+@Query("SELECT u FROM User u WHERE u.age = :name")
+public User retrieveByAge(@Param("age") int age);
 ```
 
-Pour mettre à jour les données de l’utilisateur connecté, on récupère cette utilisateur grâce
+### Utilisation du Repository :
 
-aux modules webSecurity, puis on met à jour les données de cette utilisateur grâce à nos
+Injection du Repository : 
 
-méthodes set, puis on les sauvegarde grâce à JPA via notre repository.
+```Java
+@Controller
+public class UserController {
+ 
+    @Autowired
+    private IRepoUser userRepo;
+}
+```
 
-Pour plus d’exemple consulté le repository Github du projet e-music :
+Création d'un user en base de données :
 
-<https://github.com/KilianL55/E-Music>
+```Java
+User user = new User()
+user.setName("UserName");
+userRepo.save(user);
+```
+
+Lecture d'un user par son id :
+
+```Java
+User user;
+Optional<User> optUser = repoUser.findById(id);
+if (optUser.isPresent()) {
+    user=optUser.get();
+}
+```
+
+Suppression d'un user par son id :
+
+```Java
+int id = user.getId();
+userRepo.deleteById(id);
+```
+
+Mise à jour de données d'un user existant :
+
+```Java
+User user;
+Optional<User> optUser = repoUser.findById(id);
+if (optUser.isPresent()) {
+    user=optUser.get();
+    user.setName("newUserName");
+    repo.save(user);
+}
+```
+
+
 
